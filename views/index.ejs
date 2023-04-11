@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.0.0/fonts/remixicon.css" rel="stylesheet">
+  <title>Ajjas</title>
+</head>
+
+<body>
+  
+  <div id="main">
+    <div id="nav">
+      <div id="topright">
+        <i class="ri-android-fill"></i>
+        <h3 id="username"></h3>
+      </div>
+    </div>
+    <div id="msgbox">
+      <div class="msg">
+        hii
+      </div>
+    </div>
+    <textarea placeholder="Write your msg here..."></textarea>
+    <button id="sendbutton">send message</button>
+    <div id="fixed">
+    <div id="card">
+      <input name="name" id="nameplace" type="text" placeholder="What's your name">
+      <button id="setname">Set my name</button>
+    </div>
+  </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.js"
+    integrity="sha512-xbQU0+iHqhVt7VIXi6vBJKPh3IQBF5B84sSHdjKiSccyX/1ZI7Vnkt2/8y8uruj63/DVmCxfUNohPNruthTEQA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    var socket = io();
+    var textarea = document.querySelector("textarea");
+    var username = undefined;
+    document.querySelector("#sendbutton").addEventListener("click",function(){
+      socket.emit("msg",{username:username,msgvalue:textarea.value});
+      textarea.value="";
+    
+    })
+
+    socket.on("msg",function(data){
+      var div = document.createElement("div");
+      div.classList.add("msg");
+      div.textContent = `${data.username}:${data.msgvalue}`;
+      document.querySelector("#msgbox").appendChild(div);
+    })
+
+
+  document.querySelector("#setname").addEventListener("click",function(){
+    var input = document.querySelector("input")
+
+      username=input.value.trim();
+      document.querySelector("#username").textContent=username;
+      document.querySelector("#card").style.display = "none";
+      document.querySelector("#fixed").style.display = "none";
+
+  })
+
+  </script>
+</body>
+
+</html>
